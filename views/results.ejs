@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <!-- Darkly Bootstrap theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #181c20; }
+        .result-card {
+            background: #23272b;
+            border-radius: 1rem;
+            box-shadow: 0 2px 18px #0008;
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .result-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 6px 32px #000b;
+        }
+        .score-badge {
+            background: #17a2b8;
+            color: #fff;
+            font-size: 0.95rem;
+            border-radius: .5rem;
+            padding: .2rem .7rem;
+            margin-left: .7rem;
+        }
+        .highlight {
+            background: #ffe066;
+            color: #222;
+            border-radius: 0.3em;
+            padding: 0 0.15em;
+        }
+        .fade-in { animation: fadeIn 1s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .search-title { font-weight: 700; letter-spacing: 1px; }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <div class="container py-5 fade-in">
+        <h1 class="mb-4 text-center search-title">Search Results</h1>
+        <form action="/search" method="get" class="mx-auto mb-5" style="max-width: 500px;">
+            <div class="input-group input-group-lg">
+                <input type="text" name="query" class="form-control" value="<%= query %>" required>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+
+        <% if (results.length === 0) { %>
+            <div class="alert alert-warning text-center">No results found for "<span class="highlight"><%= query %></span>".</div>
+        <% } else { %>
+            <% results.forEach(function(result, idx) { %>
+                <div class="result-card">
+                    <h5>
+                        Result <%= idx + 1 %>
+                        <span class="score-badge">TFIDF-Score: <%= result.similarity.toFixed(3) %></span>
+                    </h5>
+                    <pre class="mb-0" style="white-space: pre-wrap; background: none; border: none; color: #fff;">
+<%= result.content %>
+                    </pre>
+                </div>
+            <% }); %>
+        <% } %>
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-secondary">Back to Search</a>
+        </div>
+    </div>
+</body>
+</html>
